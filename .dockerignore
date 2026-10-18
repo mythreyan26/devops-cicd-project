@@ -1,0 +1,37 @@
+# Version control and editor
+.git
+.gitignore
+.vscode
+.idea
+
+# Python virtual environment and bytecode
+.venv
+venv
+ENV
+env
+__pycache__
+*.py[cod]
+*$py.class
+
+# Testing and coverage artifacts
+.pytest_cache
+.coverage
+htmlcov
+.tox
+.nox
+
+# Environment variables and secrets
+.env
+.env.*
+*.pem
+*.key
+
+# Docker & CI configuration files
+Dockerfile
+docker-compose*.yml
+.dockerignore
+.github
+
+# Documentation & logs
+*.log
+README.md
