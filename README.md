@@ -63,6 +63,7 @@ DevOps-CICD-Project/
 ├── Dockerfile                 # Container build instructions (non-root user, curl health check)
 ├── docker-compose.yml         # Local container orchestration file
 ├── PROJECT_STANDARDS.md       # Permanent engineering principles and guidelines
+├── pytest.ini                 # Pytest root path and test discovery configuration
 ├── requirements.txt           # Python dependencies
 ├── wsgi.py                    # Entrypoint for running the app
 └── README.md                  # Project documentation and setup guide

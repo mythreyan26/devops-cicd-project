@@ -37,7 +37,7 @@ jobs:
 
       - name: Run automated test suite
         run: |
-          pytest -v
+          python -m pytest -v
 
   publish:
     name: Continuous Deployment (Docker Hub)
