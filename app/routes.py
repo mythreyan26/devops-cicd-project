@@ -1,12 +1,19 @@
 """API routes and endpoint definitions for the Flask application."""
 
 import sys
-from flask import Blueprint, current_app, jsonify, request
+from flask import Blueprint, current_app, jsonify, render_template, request
 from werkzeug.exceptions import HTTPException
 
 from app.utils import calculate, get_utc_timestamp, validate_operand
 
 api_bp = Blueprint("api", __name__)
+
+
+@api_bp.route("/dashboard", methods=["GET"])
+@api_bp.route("/", methods=["GET"])
+def dashboard():
+    """Render the web dashboard for service health, interactive API testing, and CI/CD visualization."""
+    return render_template("dashboard.html")
 
 
 @api_bp.route("/health", methods=["GET"])

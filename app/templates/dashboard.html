@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="DevOps CI/CD Service Web Dashboard - Health Monitoring, API Testing, and Pipeline Visualization">
+  <title>DevOps Service Dashboard</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}">
+</head>
+<body>
+  <div class="dashboard-layout">
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar" aria-label="Main Navigation">
+      <div class="sidebar-header">
+        <div class="sidebar-logo" aria-hidden="true">D</div>
+        <div class="sidebar-title">DevOps Service</div>
+      </div>
+      <nav>
+        <ul class="sidebar-nav">
+          <li><a href="#overview" class="nav-link active"><span>📊</span> Overview</a></li>
+          <li><a href="#health" class="nav-link"><span>🩺</span> Health & Metrics</a></li>
+          <li><a href="#calculator" class="nav-link"><span>🧮</span> API Tester</a></li>
+          <li><a href="#pipeline" class="nav-link"><span>🚀</span> CI/CD Pipeline</a></li>
+          <li><a href="https://github.com/mythreyan26/devops-cicd-project" target="_blank" rel="noopener noreferrer" class="nav-link"><span>📂</span> GitHub Repo ↗</a></li>
+        </ul>
+      </nav>
+      <div class="sidebar-footer">
+        <div>Elevate Labs DevOps Internship</div>
+        <div>Flask · Docker · GitHub Actions</div>
+      </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <div class="main-wrapper">
+      <!-- Topbar Header -->
+      <header class="topbar">
+        <div class="topbar-left">
+          <h1 class="page-title">Service Dashboard</h1>
+        </div>
+        <div class="topbar-right">
+          <button id="themeToggleBtn" class="btn-theme" type="button" aria-pressed="false" aria-label="Toggle theme">
+            <span id="themeIcon" aria-hidden="true">🌙</span>
+            <span id="themeText">Dark Mode</span>
+          </button>
+          <button id="refreshHealthBtn" class="btn-refresh" type="button" aria-label="Refresh service health">
+            <span aria-hidden="true">🔄</span> Refresh Status
+          </button>
+        </div>
+      </header>
+
+      <!-- Dashboard Body -->
+      <main class="content-body">
+        <!-- Overview Grid -->
+        <section id="health" class="grid-cards" aria-labelledby="health-card-title">
+          <!-- Live Service Health Card -->
+          <div class="card">
+            <div class="card-header">
+              <h2 id="health-card-title" class="card-title"><span>🩺</span> Service Health</h2>
+              <div id="healthBadge" class="status-badge loading" role="status" aria-live="polite">
+                <span class="status-dot" aria-hidden="true"></span>
+                <span id="healthBadgeText">Checking...</span>
+              </div>
+            </div>
+            <div class="metric-list">
+              <div class="metric-item">
+                <span class="metric-label">Status Endpoint</span>
+                <span class="metric-value"><a href="/health" target="_blank" style="color: inherit; text-decoration: underline;">GET /health</a></span>
+              </div>
+              <div class="metric-item">
+                <span class="metric-label">Last Checked</span>
+                <span id="lastCheck" class="metric-value">Connecting...</span>
+              </div>
+              <div class="metric-item">
+                <span class="metric-label">Round-Trip Latency</span>
+                <span id="latency" class="metric-value">-- ms</span>
+              </div>
+              <div class="metric-item">
+                <span class="metric-label">Health Check Interval</span>
+                <span class="metric-value">30s (Automatic)</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Runtime & Environment Card -->
+          <div class="card" aria-labelledby="env-card-title">
+            <div class="card-header">
+              <h2 id="env-card-title" class="card-title"><span>⚙️</span> Runtime Environment</h2>
+              <a href="/api/v1/info" target="_blank" class="btn-link" style="font-size: 0.75rem;">View JSON</a>
+            </div>
+            <div class="metric-list">
+              <div class="metric-item">
+                <span class="metric-label">Application Name</span>
+                <span id="appName" class="metric-value">Loading...</span>
+              </div>
+              <div class="metric-item">
+                <span class="metric-label">Version</span>
+                <span id="appVersion" class="metric-value">Loading...</span>
+              </div>
+              <div class="metric-item">
+                <span class="metric-label">Python Version</span>
+                <span id="pythonVersion" class="metric-value">Loading...</span>
+              </div>
+              <div class="metric-item">
+                <span class="metric-label">Environment</span>
+                <span id="appEnv" class="metric-value">Loading...</span>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Interactive API Tester -->
+        <section id="calculator" class="card" aria-labelledby="calc-card-title">
+          <div class="card-header">
+            <div>
+              <h2 id="calc-card-title" class="card-title"><span>🧮</span> Interactive API Calculator</h2>
+              <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 0.25rem;">
+                Sends real HTTP requests directly to <code>POST /api/v1/calculate</code> to test calculation and error handling.
+              </p>
+            </div>
+          </div>
+
+          <form id="calcForm" class="api-form">
+            <div class="form-row">
+              <div class="form-group">
+                <label for="num1" class="form-label">Operand 1 (num1)</label>
+                <input id="num1" type="text" class="form-input" placeholder="e.g. 15 or 10.5" value="15" required autocomplete="off">
+              </div>
+              <div class="form-group">
+                <label for="operation" class="form-label">Operation</label>
+                <select id="operation" class="form-select">
+                  <option value="add">Add (+)</option>
+                  <option value="subtract">Subtract (-)</option>
+                  <option value="multiply">Multiply (*)</option>
+                  <option value="divide">Divide (/)</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="num2" class="form-label">Operand 2 (num2)</label>
+                <input id="num2" type="text" class="form-input" placeholder="e.g. 25 or 0" value="25" required autocomplete="off">
+              </div>
+            </div>
+
+            <div style="display: flex; gap: 0.75rem; align-items: center;">
+              <button id="calcSubmitBtn" type="submit" class="btn-submit">
+                <span>⚡</span> Execute Calculation
+              </button>
+              <span style="font-size: 0.8rem; color: var(--text-muted);">
+                Tip: Enter <code>0</code> in Operand 2 with <code>Divide</code> to test failure handling.
+              </span>
+            </div>
+          </form>
+
+          <!-- Response Inspector -->
+          <div class="response-container">
+            <div class="response-header">
+              <span>Server Response (JSON):</span>
+              <div style="display: flex; gap: 0.5rem; align-items: center;">
+                <span id="responseStatusPill" class="response-status-pill">Ready</span>
+                <button id="copyResponseBtn" type="button" class="btn-link" style="padding: 0.2rem 0.5rem; font-size: 0.75rem;">Copy JSON</button>
+              </div>
+            </div>
+            <pre class="code-box"><code id="responseCodeBox">Click "Execute Calculation" to test the endpoint.</code></pre>
+          </div>
+        </section>
+
+        <!-- CI/CD Pipeline Visualizer -->
+        <section id="pipeline" class="card" aria-labelledby="pipeline-card-title">
+          <div class="card-header">
+            <div>
+              <h2 id="pipeline-card-title" class="card-title"><span>🚀</span> CI/CD Pipeline Architecture</h2>
+              <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 0.25rem;">
+                Automated continuous integration and container deployment pipeline configured via GitHub Actions.
+              </p>
+            </div>
+          </div>
+
+          <div class="pipeline-track">
+            <!-- Stage 1 -->
+            <div class="pipeline-step">
+              <span class="pipeline-step-num">Stage 1</span>
+              <h3 class="pipeline-step-title">Git Push to Main</h3>
+              <p class="pipeline-step-desc">Developer pushes clean commits with verified standards to repository.</p>
+              <span class="pipeline-step-badge">Trigger</span>
+            </div>
+
+            <!-- Stage 2 -->
+            <div class="pipeline-step">
+              <span class="pipeline-step-num">Stage 2</span>
+              <h3 class="pipeline-step-title">GitHub Actions CI</h3>
+              <p class="pipeline-step-desc">Runner sets up Python 3.12, installs requirements, and runs complete 22-test Pytest suite.</p>
+              <span class="pipeline-step-badge">Automated Gate</span>
+            </div>
+
+            <!-- Stage 3 -->
+            <div class="pipeline-step">
+              <span class="pipeline-step-num">Stage 3</span>
+              <h3 class="pipeline-step-title">Docker Buildx Build</h3>
+              <p class="pipeline-step-desc">Builds minimal non-root container with curl health check probe. Only runs if tests pass.</p>
+              <span class="pipeline-step-badge">Containerized</span>
+            </div>
+
+            <!-- Stage 4 -->
+            <div class="pipeline-step">
+              <span class="pipeline-step-num">Stage 4</span>
+              <h3 class="pipeline-step-title">Docker Hub Registry</h3>
+              <p class="pipeline-step-desc">Pushes image tagged with commit SHA and <code>:latest</code> using GitHub Secrets.</p>
+              <span class="pipeline-step-badge">Published</span>
+            </div>
+          </div>
+
+          <!-- Official Links -->
+          <div class="pipeline-links">
+            <a href="https://github.com/mythreyan26/devops-cicd-project" target="_blank" rel="noopener noreferrer" class="btn-link">
+              <span>📂</span> GitHub Repository
+            </a>
+            <a href="https://github.com/mythreyan26/devops-cicd-project/actions" target="_blank" rel="noopener noreferrer" class="btn-link">
+              <span>⚡</span> GitHub Actions Workflow Runs
+            </a>
+            <a href="https://hub.docker.com/repository/docker/mythreyan26/devops-cicd-service/tags" target="_blank" rel="noopener noreferrer" class="btn-link">
+              <span>🐳</span> Docker Hub Repository Tags
+            </a>
+          </div>
+        </section>
+      </main>
+    </div>
+  </div>
+
+  <script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
+</body>
+</html>

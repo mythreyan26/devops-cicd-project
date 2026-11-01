@@ -50,14 +50,20 @@ DevOps-CICD-Project/
 │   └── workflows/
 │       └── ci-cd.yml          # GitHub Actions CI/CD workflow
 ├── app/
+│   ├── static/
+│   │   ├── css/dashboard.css  # Responsive dashboard styles (dark & light themes)
+│   │   └── js/dashboard.js    # Health polling & interactive API calculation logic
+│   ├── templates/
+│   │   └── dashboard.html     # Web dashboard template
 │   ├── __init__.py            # Flask application factory (create_app)
 │   ├── config.py              # Environment configuration classes
-│   ├── routes.py              # API routes and JSON error handlers
+│   ├── routes.py              # API routes, web dashboard & JSON error handlers
 │   └── utils.py               # Timezone-aware UTC timestamping and math functions
 ├── tests/
 │   ├── conftest.py            # Pytest test client fixtures
-│   ├── test_health.py         # Tests for /health and /api/v1/info
-│   └── test_api.py            # Math tests and deliberate failure-handling tests
+│   ├── test_api.py            # Math tests and deliberate failure-handling tests
+│   ├── test_dashboard.py      # Automated tests for dashboard rendering
+│   └── test_health.py         # Tests for /health and /api/v1/info
 ├── .dockerignore              # Excludes .venv, cache, and secrets from Docker builds
 ├── .gitignore                 # Excludes local environments and test artifacts from git
 ├── Dockerfile                 # Container build instructions (non-root user, curl health check)
@@ -143,11 +149,19 @@ docker compose down
 
 ---
 
-## API Endpoints
+## Web Dashboard & API Endpoints
 
-*(Note: In the responses below, timestamps are illustrative and will reflect your actual UTC request time.)*
+### 1. Interactive DevOps Dashboard (`GET /dashboard` or `GET /`)
+Access the web dashboard in any browser at `http://localhost:5000/dashboard` or `http://localhost:5000`:
+- **Real-time Health Monitoring:** Live status indicator, UTC timestamp, and measured round-trip latency polling every 30 seconds.
+- **Runtime Environment Metadata:** Displays application name, version, Python runtime, and environment (`production` / `development`).
+- **Interactive API Calculator:** Allows executing real calculations and testing error handling directly against `/api/v1/calculate` with formatted JSON inspection.
+- **CI/CD Pipeline Tracker:** Visual representation of pipeline stages with links to GitHub repository, Actions workflows, and Docker Hub tags.
+- **Theme Support:** Dark and light mode toggle with system preference detection and `localStorage` persistence.
 
-### 1. Health Check (`GET /health`)
+---
+
+### 2. Health Check (`GET /health`)
 Used by Docker health checks and monitoring probes.
 ```bash
 curl -i http://localhost:5000/health
@@ -160,7 +174,7 @@ curl -i http://localhost:5000/health
 }
 ```
 
-### 2. Application Info (`GET /api/v1/info`)
+### 3. Application Info (`GET /api/v1/info`)
 Returns application name, version, Python runtime version, and environment.
 ```bash
 curl -i http://localhost:5000/api/v1/info
@@ -176,7 +190,7 @@ curl -i http://localhost:5000/api/v1/info
 }
 ```
 
-### 3. Arithmetic Calculator (`POST /api/v1/calculate`)
+### 4. Arithmetic Calculator (`POST /api/v1/calculate`)
 Supports `add`, `subtract`, `multiply`, and `divide`.
 ```bash
 curl -i -X POST http://localhost:5000/api/v1/calculate \
@@ -194,7 +208,7 @@ curl -i -X POST http://localhost:5000/api/v1/calculate \
 }
 ```
 
-### 4. Failure Handling Demo (Division by Zero)
+### 5. Failure Handling Demo (Division by Zero)
 ```bash
 curl -i -X POST http://localhost:5000/api/v1/calculate \
   -H "Content-Type: application/json" \
