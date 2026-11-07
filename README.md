@@ -62,8 +62,7 @@ DevOps-CICD-Project/
 ├── screenshots/
 │   ├── 01-service-dashboard.png            # Web dashboard & real-time monitoring
 │   ├── 02-api-endpoints-testing.png        # CLI execution & API endpoint validation
-│   ├── 03-github-actions-cicd-pipeline.png # Passing GitHub Actions CI/CD workflows
-│   └── 04-internship-project-submission.png# Elevate Labs project submission confirmation
+│   └── 03-github-actions-cicd-pipeline.png # Passing GitHub Actions CI/CD workflows
 ├── tests/
 │   ├── conftest.py            # Pytest test client fixtures
 │   ├── test_api.py            # Math tests and deliberate failure-handling tests
@@ -232,7 +231,7 @@ curl -i -X POST http://localhost:5000/api/v1/calculate \
 
 ## Screenshots / Project Output
 
-The following screenshots capture genuine outputs and operational verification of the running application, API endpoints, CI/CD pipeline, and project submission:
+The following screenshots capture genuine outputs and operational verification of the running application, API endpoints, and CI/CD pipeline:
 
 ### 1. Interactive DevOps Service Dashboard (`GET /dashboard`)
 The responsive web interface running locally on `http://localhost:5000/dashboard`, demonstrating real-time health status polling, 19 ms round-trip latency, runtime environment metadata (`DevOps-CICD-Service v1.0.0`, `Python 3.14.7`), and the interactive API calculator.
@@ -252,13 +251,6 @@ Automated and manual validation of API routes via PowerShell `Invoke-RestMethod`
 Continuous Integration and Deployment workflow execution on GitHub Actions (`mythreyan26/devops-cicd-project`). Successful runs on the `main` branch verify the automated Pytest suite (24/24 passed), Docker build, and container publishing stages.
 
 ![GitHub Actions CI/CD Pipeline](screenshots/03-github-actions-cicd-pipeline.png)
-
----
-
-### 4. Internship Project Submission Confirmation
-Successful project milestone submission confirmation for the Elevate Labs 2-Week DevOps Internship.
-
-![Internship Project Submission](screenshots/04-internship-project-submission.png)
 
 ---
 
