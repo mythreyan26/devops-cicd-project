@@ -59,6 +59,11 @@ DevOps-CICD-Project/
 │   ├── config.py              # Environment configuration classes
 │   ├── routes.py              # API routes, web dashboard & JSON error handlers
 │   └── utils.py               # Timezone-aware UTC timestamping and math functions
+├── screenshots/
+│   ├── 01-service-dashboard.png            # Web dashboard & real-time monitoring
+│   ├── 02-api-endpoints-testing.png        # CLI execution & API endpoint validation
+│   ├── 03-github-actions-cicd-pipeline.png # Passing GitHub Actions CI/CD workflows
+│   └── 04-internship-project-submission.png# Elevate Labs project submission confirmation
 ├── tests/
 │   ├── conftest.py            # Pytest test client fixtures
 │   ├── test_api.py            # Math tests and deliberate failure-handling tests
@@ -86,9 +91,9 @@ DevOps-CICD-Project/
 
 ### 2. Set Up Virtual Environment
 ```bash
-# Clone the repository (once pushed to GitHub)
-git clone https://github.com/mythreyan26/DevOps-CICD-Project.git
-cd DevOps-CICD-Project
+# Clone the repository
+git clone https://github.com/mythreyan26/devops-cicd-project.git
+cd devops-cicd-project
 
 # Create and activate virtual environment
 python -m venv .venv
@@ -109,7 +114,7 @@ pip install -r requirements.txt
 ```bash
 pytest -v
 ```
-All 22 automated tests should pass. The test suite covers positive calculation cases, invalid inputs, division by zero, booleans passed as numbers, and unknown routes.
+All 24 automated tests pass. The test suite covers positive calculation cases, invalid inputs, division by zero, booleans passed as numbers, unknown routes, and dashboard rendering.
 
 ### 5. Run the Flask App Locally
 ```bash
@@ -170,7 +175,7 @@ curl -i http://localhost:5000/health
 ```json
 {
   "status": "healthy",
-  "timestamp": "<UTC ISO-8601 timestamp, e.g. 2026-10-18T08:44:52+00:00>"
+  "timestamp": "2026-11-01T13:26:58.501190+00:00"
 }
 ```
 
@@ -183,9 +188,9 @@ curl -i http://localhost:5000/api/v1/info
 ```json
 {
   "app_name": "DevOps-CICD-Service",
-  "environment": "production",
-  "python_version": "3.12.15",
-  "timestamp": "<UTC ISO-8601 timestamp, e.g. 2026-10-18T08:44:52+00:00>",
+  "environment": "development",
+  "python_version": "3.14.7",
+  "timestamp": "2026-11-01T13:27:15.731266+00:00",
   "version": "1.0.0"
 }
 ```
@@ -204,7 +209,7 @@ curl -i -X POST http://localhost:5000/api/v1/calculate \
   "num1": 8.0,
   "num2": 9.0,
   "result": 72,
-  "timestamp": "<UTC ISO-8601 timestamp, e.g. 2026-10-18T08:48:29+00:00>"
+  "timestamp": "2026-11-01T13:26:15.784862+00:00"
 }
 ```
 
@@ -219,9 +224,41 @@ curl -i -X POST http://localhost:5000/api/v1/calculate \
 {
   "error": "Bad Request",
   "message": "Division by zero is not allowed.",
-  "timestamp": "<UTC ISO-8601 timestamp, e.g. 2026-10-18T08:45:41+00:00>"
+  "timestamp": "2026-11-01T13:26:22.645597+00:00"
 }
 ```
+
+---
+
+## Screenshots / Project Output
+
+The following screenshots capture genuine outputs and operational verification of the running application, API endpoints, CI/CD pipeline, and project submission:
+
+### 1. Interactive DevOps Service Dashboard (`GET /dashboard`)
+The responsive web interface running locally on `http://localhost:5000/dashboard`, demonstrating real-time health status polling, 19 ms round-trip latency, runtime environment metadata (`DevOps-CICD-Service v1.0.0`, `Python 3.14.7`), and the interactive API calculator.
+
+![DevOps Service Dashboard](screenshots/01-service-dashboard.png)
+
+---
+
+### 2. REST API Endpoint Execution & Verification (CLI)
+Automated and manual validation of API routes via PowerShell `Invoke-RestMethod` against `http://127.0.0.1:5000`, including arithmetic operations (`add`, `subtract`, `multiply`, `divide`), service health probe (`GET /health`), and runtime metadata inspection (`GET /api/v1/info`).
+
+![REST API Endpoints Testing](screenshots/02-api-endpoints-testing.png)
+
+---
+
+### 3. GitHub Actions CI/CD Pipeline
+Continuous Integration and Deployment workflow execution on GitHub Actions (`mythreyan26/devops-cicd-project`). Successful runs on the `main` branch verify the automated Pytest suite (24/24 passed), Docker build, and container publishing stages.
+
+![GitHub Actions CI/CD Pipeline](screenshots/03-github-actions-cicd-pipeline.png)
+
+---
+
+### 4. Internship Project Submission Confirmation
+Successful project milestone submission confirmation for the Elevate Labs 2-Week DevOps Internship.
+
+![Internship Project Submission](screenshots/04-internship-project-submission.png)
 
 ---
 
@@ -255,7 +292,8 @@ To allow GitHub Actions to push the built Docker image to Docker Hub, add these 
 
 ## Current Verification Status
 
-- **Local Tests**: Verified (22/22 tests passing locally via pytest).
+- **Local Tests**: Verified (24/24 tests passing locally via pytest).
 - **Local Container**: Verified (Docker Compose runs container healthy on port 5000).
-- **Remote GitHub Actions**: Pending remote push and secret configuration.
-- **Docker Hub Publish**: Pending push to GitHub.
+- **Remote GitHub Actions**: Verified (CI/CD pipeline passing on `main` branch).
+- **Docker Hub Publish**: Verified (`mythreyan26/devops-cicd-service` image published).
+- **Project Outputs**: Verified (Live dashboard, API validation, and workflow screenshots embedded).

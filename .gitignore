@@ -40,3 +40,6 @@ Desktop.ini
 .idea/
 *.swp
 *.swo
+
+# Raw screenshot capture directory
+Output/
